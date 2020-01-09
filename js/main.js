@@ -46,15 +46,49 @@ $(document).ready(function() {
 
     //------- Filter  js --------//  
 
-      $('.filters ul li').click(function(){
+    $('.filters ul li').click(function(){
         $('.filters ul li').removeClass('active');
         $(this).addClass('active');
-        
+
+        var $items = $('.grid').find('.all');
+
         var data = $(this).attr('data-filter');
-        $grid.isotope({
-          filter: data
-        })
-      });
+        $items.filter(data).css({
+            display: 'block',
+        });
+        $items.not(data).css({
+            display: 'none'
+        });
+
+        $items.sort(function(e1, e2) {
+            var v1 = e1.classList.contains(data.substr(1, data.length));
+            var v2 = e2.classList.contains(data.substr(1, data.length));
+            console.log(v1, v2)
+            if(((v1 && v2) || ((!v1) && (!v2)))){return 0;}
+            if(v1 && (!v2)){return -1;}
+            if((!v1) && v2){return 1;}
+        });
+
+        for(var i=0; i < $items.length; i++) {
+            document.getElementById("publications-shower").appendChild($items[i]);
+        }
+
+    });
+
+
+//        document.getElementById("publications-shower").replaceChild($items.childNodes ,$("#publications-shower").children());
+
+//        back-up !!!
+
+//      $('.filters ul li').click(function(){
+//        $('.filters ul li').removeClass('active');
+//        $(this).addClass('active');
+//
+//        var data = $(this).attr('data-filter');
+//        $grid.isotope({
+//          filter: data
+//        })
+//      });
 
 
       if(document.getElementById("portfolio")){
@@ -343,7 +377,7 @@ $(document).ready(function() {
         function init() {
             var mapOptions = {
                 zoom: 11,
-                center: new google.maps.LatLng(40.6700, -73.9400), // New York
+                center: new google.maps.LatLng(49.039010, 2.071200), // ENSEA
                 styles: [{
                     "featureType": "water",
                     "elementType": "geometry",
@@ -470,11 +504,5 @@ $(document).ready(function() {
             });
         }
     }
-
-    //------- Mailchimp js --------//  
-
-    $(document).ready(function() {
-        $('#mc_embed_signup').find('form').ajaxChimp();
-    });
 
 });
